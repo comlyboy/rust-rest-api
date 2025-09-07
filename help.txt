@@ -1,0 +1,14 @@
+starting command
+cargo watch -q -c -w src/ -w Cargo.toml -x run
+cargo watch -c -w src/ -w Cargo.toml -x check -x run
+
+
+
+https://chatgpt.com/c/68ae36bd-2afc-8333-afd6-3173bb9d6ab0
+https://github.com/jeremychone-channel/rust-axum-course
+https://www.youtube.com/watch?v=rQ_J9WH6CGk
+https://www.youtube.com/watch?v=XZtlD_m59sM
+https://www.youtube.com/watch?v=BpPEoZW5IiY
+https://www.youtube.com/watch?v=EQfGDIyC7ng
+https://github.com/3rfaan/courses/tree/main/Rust/rust-by-practice/src
+https://github.com/tokio-rs/axum/tree/main/examples/readme
