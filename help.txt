@@ -15,3 +15,6 @@ https://github.com/tokio-rs/axum/tree/main/examples/readme
 
 for req validation
 https://www.youtube.com/watch?v=Zm3jKlnta58
+
+rust app
+https://github.com/deepgram-devs/deepgram-rust-streaming-sample/tree/main/flux-turn-taking

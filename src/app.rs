@@ -5,7 +5,6 @@ use axum::{
   routing::{get, post},
 };
 
-use mongodb::Database;
 
 use crate::{config::AppConfig, database::initialize_dbs};
 use crate::{database::Databases, handlers};
