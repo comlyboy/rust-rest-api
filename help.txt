@@ -12,3 +12,6 @@ https://www.youtube.com/watch?v=BpPEoZW5IiY
 https://www.youtube.com/watch?v=EQfGDIyC7ng
 https://github.com/3rfaan/courses/tree/main/Rust/rust-by-practice/src
 https://github.com/tokio-rs/axum/tree/main/examples/readme
+
+for req validation
+https://www.youtube.com/watch?v=Zm3jKlnta58

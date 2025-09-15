@@ -1,43 +1,53 @@
 use axum::{
   Router,
-  response::Html,
+  http::StatusCode,
+  response::{Html, IntoResponse},
   routing::{get, post},
 };
-use swagger_ui_dist::{ApiDefinition, OpenApiSource, generate_routes};
-use tokio::fs;
 
-use crate::handlers;
+use mongodb::Database;
 
-pub fn initialize_app() -> Router {
-  let api_def = ApiDefinition {
-    uri_prefix: "/api/docs",
-    api_definition: OpenApiSource::Inline("./swagger-ui.yml"),
-    title: Some("My Super Duper API"),
+use crate::{config::AppConfig, database::initialize_dbs};
+use crate::{database::Databases, handlers};
+
+#[allow(dead_code)]
+#[derive(Clone)]
+pub struct AppState {
+  pub env: String,
+  pub databases: Databases,
+}
+
+/** Initialise API */
+pub async fn initialize_app() -> Router {
+  // Initialize database
+  let databases = initialize_dbs().await;
+
+  let state = AppState {
+    env: AppConfig::from_env().env,
+    databases: databases,
   };
 
-  return Router::new().merge(generate_routes(api_def)).nest(
+  return Router::new().nest(
     "/api",
     Router::new()
       .nest(
         "/auth",
         Router::new()
-          .route("/login", post(handlers::auth::login))
-          .route("/register", post(handlers::auth::register)),
+          .route("/login", post(handlers::auth_handler::login))
+          .route("/register", post(handlers::auth_handler::register)),
       )
       .nest(
         "/users",
         Router::new()
-          .route("/", get(handlers::user::get_users))
-          .route("/{userId}", get(handlers::user::get_user_by_id)),
+          .route("/", get(handlers::user_handler::get_users))
+          .route("/{userId}", get(handlers::user_handler::get_user_by_id)),
       )
-      .route(
-        "/docs.yml",
-        get(|| async {
-          fs::read_to_string("swagger-ui.yml")
-            .await
-            .unwrap_or_else(|_| "# OpenAPI spec not found".into());
-        }),
-      )
-      .route("/", get(|| async { Html("Hello World!") })),
+      .route("/", get(|| async { Html("Hello World!") }))
+      .fallback(handler_404) // 👈 catch-all handler
+      .with_state(state),
   );
+}
+
+async fn handler_404() -> impl IntoResponse {
+  (StatusCode::NOT_FOUND, "Route not found")
 }
